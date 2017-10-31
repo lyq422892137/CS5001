@@ -14,26 +14,21 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
 
-public class GUIComponents extends JFrame {
+public class GUIComponents1 extends JFrame {
     private JFrame jf = new JFrame("Week 7");
     private JPanel jp;
     private JTextField jtf;
     boolean blockFlag = true;
     private JButton jb;
-    public GUIComponents() {
+    public GUIComponents1() {
+        this.setSize(500,100);
         this.jp = new JPanel();
         this.jtf = new JTextField(10);
+        this.jtf.setEnabled(true);
         this.jb = new JButton("Change");
-        setUpComponents();
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-    public void setUpComponents() {
-        this.setSize(500,100);
-        jtf.setEnabled(true);
-        jp.add(jtf);
-        jb.addActionListener(new ActionListener() {
+        this.jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Button Pressed " + blockFlag);
@@ -52,7 +47,12 @@ public class GUIComponents extends JFrame {
                 }
             }
         });
-        jp.add(jb);
+        this.jp.add(this.jtf);
+        this.jp.add(this.jb);
         getContentPane().add(jp);
+        // setUpComponents();
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
+
 }
