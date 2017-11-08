@@ -1,0 +1,11 @@
+1. http://www.jb51.net/article/93662.htm
+
+socket 例子
+2. http://blog.csdn.net/a9529lty/article/details/7174265
+
+发送接收字符串
+
+3. http://blog.csdn.net/mimenglove/article/details/42640927
+
+4. 例子
+http://www.cnblogs.com/xzmblog/p/4505237.html
