@@ -1,0 +1,64 @@
+Functionality
+All basic functionality was implemented however output is often duplicated.
+Completed:
+¥ Accept two arguments from the command line
+¥ First argument is the name (and path) of the file containing the text
+¥ Second argument is the desired length of the line for wrapping the text
+¥ If either argument is missing or invalid, output usage
+¥ Right-align text from the file:
+¥ Ensure each line contains the maximum number of words possible within the specified limit
+¥ Ensure no word is split across lines
+¥ Output the right-aligned text to the standard output
+
+Extensions
+¥ Successfully implemented left and right alignment and justify however output is often duplicated.
+     Completed:
+     ¥ Left align text from the file using command line argument L
+     ¥ Centre align text from the file using command line argument C
+     ¥ Justify text from the file using command line argument J
+
+
+Design&implementation
+¥ Your program returns an error if a line length of 0 is entered as a parameter 
+¥ In many cases your program correctly aligns the text however it duplicates the output.
+¥ Your code is decomposed into a small number of methods however it is rather complex. It is not an Object Oriented design in which you would have different classes to handle each of the tasks. Perhaps having an abstract/superclass containing common methods, this would allow you to avoid the use of unneccessary static methods.
+
+Code quality
+¥ The ArrangeLinesCentral method contains significant duplicated code which should be extracted to a single method to prevent code duplication.
+¥ Your methods are long and complex, you may want to consider extracting code from within the if statements into separate methods to improve code readability.
+Autochecking  
+Total tests: 48
+Pass: 35
+Fail: 13
+
+Total basic tests: 16
+Pass: 12
+Fail: 4
+
+Total public basic tests: 11
+Pass: 11
+Fail: 0
+Total private basic tests: 5
+Pass: 0
+Fail: 5
+
+Total enhancement tests: 
+Pass: 21
+Fail: 9
+Total public enhancement tests: 18
+Pass: 18
+Fail: 0
+Total private enhancement tests: 12
+Pass: 3
+Fail: 9
+Total other tests: 2
+Pass: 2
+Fail: 0
+
+Testing
+¥ There are no signs of additional tests, if you created any please include them with your source code as they demonstrate good practice.
+
+Overall comments (Summary)
+¥ Basic right alignment and 3 enhancements, however these often duplicate the output. Use of static methods. A coding practical containing nearly achieving all required functionality. Argument validation does not identify all invalid cases.
+
+
