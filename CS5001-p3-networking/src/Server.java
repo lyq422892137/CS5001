@@ -3,8 +3,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.net.Socket;
 /**
  * this is the server class.
@@ -68,11 +68,18 @@ public class Server extends Thread {
             }
         }
         String[] request = recvBuffer.split(" ");
-        String sendBuffer = generateResponse(filepath, request);
+        File file = new File(filepath + "/" + request[1]);
+        String sendBuffer = generateResponse(file, request);
         logRequest(sendBuffer, recvBuffer, logFile, counter);
         try {
             byte[] b = sendBuffer.getBytes("UTF8");
-            bos.write(b);
+            byte[] content = sendFile(file);
+            if (b != null) {
+                bos.write(b);
+            }
+            if (content != null && request[0].equals(Responses.REQUEST2)) {
+                bos.write(content);
+            }
             bos.flush();
             sock.close();
             bos.close();
@@ -82,18 +89,17 @@ public class Server extends Thread {
     }
     /**
      * generate response and send it.
-     * @param filepath filepath
+     * @param file THE FILE
      * @param request is the String[] of request to be dealt with
      * @throws IOException I.O
      * @return the response
      * */
-    public String generateResponse(String filepath, String[] request) throws IOException {
+    public String generateResponse(File file, String[] request) throws IOException {
         String responseStr;
         httpResponse response;
         String protocol = request[2];
         String[] protocolSplit = protocol.split("Host:");
         protocol = protocolSplit[0];
-        File file = new File(filepath + "/" + request[1]);
         String fileName = file.getName();
         String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
         long fileLen = file.length();
@@ -109,30 +115,23 @@ public class Server extends Thread {
                     int storeFlag = storeFile(file);
                     if (storeFlag == 0) {
                         flag = Numbers.ACCEPTED;
-                        response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                        response = new httpResponse(protocol, flag, fileType, fileLength);
                     } else {
                         flag = Numbers.CREATED;
-                        response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                        response = new httpResponse(protocol, flag, fileType, fileLength);
                     }
                     responseStr = response.toString();
                 } else {
                     flag = Numbers.NOT_FOUND;
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 }
             } else {
                 if (request[0].equals(Responses.REQUEST1)) {
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 } else if (request[0].equals(Responses.REQUEST2)) {
-                    int readLen;
-                    FileInputStream fis = new FileInputStream(file);
-                    readLen = fis.available();
-                    byte[] bytes = new byte[readLen];
-                    fis.read(bytes);
-                    fis.close();
-                    String buffer = new String(bytes, "UTF-8");
-                    response = new httpResponse(protocol, flag, fileType, fileLength, buffer);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 } else if (request[0].equals(Responses.REQUEST3)) {
                     /*
@@ -145,25 +144,25 @@ public class Server extends Thread {
                     if (file.exists()) {
                         file.delete();
                     }
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 } else if (request[0].equals(Responses.REQUEST4)) {
                     flag = Numbers.ACCEPTED;
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 } else if (request[0].equals(Responses.REQUEST5)) {
                     flag = Numbers.METHOD_NOT_ALLOWED;
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 } else {
                     flag = Numbers.NOT_IMPLEMENTED;
-                    response = new httpResponse(protocol, flag, fileType, fileLength, null);
+                    response = new httpResponse(protocol, flag, fileType, fileLength);
                     responseStr = response.toString();
                 }
             }
         } catch (Exception e) {
             flag = Numbers.NOT_FOUND;
-            response = new httpResponse(protocol, flag, fileType, fileLength, null);
+            response = new httpResponse(protocol, flag, fileType, fileLength);
             responseStr = response.toString();
             e.printStackTrace();
         }
@@ -210,5 +209,25 @@ public class Server extends Thread {
             storeFlag = 1;
         }
         return storeFlag;
+    }
+    /**
+     * send the content to the client.
+     * @param file  the file
+     * @return byte[] for all files
+     * @throws IOException I/O
+     * */
+    public byte[] sendFile(File file) throws IOException {
+        byte[] bytes;
+        int readLen;
+        if (!file.exists()) {
+            bytes = null;
+        } else {
+            FileInputStream fis = new FileInputStream(file);
+            readLen = fis.available();
+            bytes = new byte[readLen];
+            fis.read(bytes);
+            fis.close();
+        }
+        return bytes;
     }
 }

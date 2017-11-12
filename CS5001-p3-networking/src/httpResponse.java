@@ -8,22 +8,19 @@ public class httpResponse {
     private String contentLen;
     private String contentType;
     private String body;
-    private String content;
     private int length;
     /**
      * The response format.
-     * @param content content
      * @param contentLen the file length
      * @param contentType the file type
      * @param flag flag is the code
      * @param protocl is the http version
      */
-    public httpResponse(String protocl, int flag, String contentType, String contentLen, String content) {
+    public httpResponse(String protocl, int flag, String contentType, String contentLen) {
         this.protocl = protocl;
         this.metadata = "Server: Simple Java Http Server";
         this.contentType = contentType;
         this.contentLen = contentLen;
-        this.content = content;
         if (flag == Numbers.NOT_FOUND) {
             this.statusCode = "404 Not Found";
             this.body = "response message in this case containing " + " xxx bytes of error message as an " + this.contentType + " page";
@@ -74,11 +71,7 @@ public class httpResponse {
         String strHeader = protocl + " " + statusCode + "\r\n" + metadata + "\r\nContent-Type: " + contentType + "\r\nContent-Length: " + contentLen + "\r\n";
         String strBody = body;
         String str;
-        if (content == null || content.isEmpty()) {
-            str = strHeader + strBody + "\r\n";
-        } else {
-            str = strHeader + strBody + "\r\n\r\n" + content + "\r\n";
-        }
+        str = strHeader + strBody + "\r\n\r\n";
         return str;
     }
 }

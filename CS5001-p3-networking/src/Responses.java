@@ -15,9 +15,9 @@ public class Responses {
      * */
     public static final String REQUEST3 = "DELETE";
     /**
-     * POST.
+     * PUT.
      * */
-    public static final String REQUEST4 = "POST";
+    public static final String REQUEST4 = "PUT";
     /**
      * OPTIONS.
      * */

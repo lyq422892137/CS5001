@@ -18,7 +18,7 @@ The response “200” does not mean the server has deleted the file, just telli
 
 However, to simplify this progress, in this program, the server will delete the file directly.
 
-(2)	POST: send a file to the server by a client.
+(2)	PUT: send a file to the server by a client.
 
 If successes, “201 Created” will be sent as a response.
 
